@@ -10,7 +10,10 @@ interface HeroProps {
   tick: PriceTick | null;
   dir: 0 | 1 | -1;
   handle: string | null;
+  walletAvailable: boolean;
+  walletConnected: boolean;
   onConnect: () => void;
+  onDisconnect: () => void;
 }
 
 export default function Hero({
@@ -19,7 +22,10 @@ export default function Hero({
   tick,
   dir,
   handle,
+  walletAvailable,
+  walletConnected,
   onConnect,
+  onDisconnect,
 }: HeroProps) {
   const priceClass =
     dir === 1 ? "price-flash-up" : dir === -1 ? "price-flash-down" : "price-idle";
@@ -36,16 +42,34 @@ export default function Hero({
             REV 1.0
           </span>
           {handle ? (
-            <span className="border border-lip px-3 py-1 font-mono text-[11px] tracking-[0.15em] text-ink">
-              {handle}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="border border-lip px-3 py-1 font-mono text-[11px] uppercase tracking-[0.15em] text-ink">
+                {handle}
+              </span>
+              {walletConnected && (
+                <button
+                  onClick={onDisconnect}
+                  className="cell-hover border border-lip px-2 py-1 font-mono text-[10px] tracking-[0.15em] text-dim hover:border-ink hover:text-ink"
+                  aria-label="disconnect wallet"
+                >
+                  [ X ]
+                </button>
+              )}
+            </div>
           ) : (
-            <button
-              onClick={onConnect}
-              className="cell-hover border border-lip px-3 py-1 font-mono text-[11px] tracking-[0.15em] text-ash hover:border-ink hover:text-ink"
-            >
-              [ CONNECT ]
-            </button>
+            <div className="flex flex-col items-end gap-1">
+              <button
+                onClick={onConnect}
+                className="cell-hover border border-lip px-3 py-1 font-mono text-[11px] tracking-[0.15em] text-ash hover:border-ink hover:text-ink"
+              >
+                [ CONNECT ]
+              </button>
+              {!walletAvailable && (
+                <span className="font-mono text-[9px] tracking-[0.12em] text-dim">
+                  NO WALLET DETECTED // SPECTATOR MODE
+                </span>
+              )}
+            </div>
           )}
         </div>
       </div>

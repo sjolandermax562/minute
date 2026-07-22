@@ -17,6 +17,7 @@ import {
   roundStart,
   settleRound,
 } from "./engine";
+import { truncateAddress, useSolanaWallet } from "./useSolanaWallet";
 
 export interface PriceTick {
   price: number;
@@ -89,6 +90,7 @@ function lsSet(key: string, value: unknown): void {
 }
 
 export function useMarket() {
+  const wallet = useSolanaWallet();
   const [now, setNow] = useState(() => Date.now());
   const rid = roundIdAt(now);
   const nowSec = Math.floor(now / 1000);
@@ -386,6 +388,10 @@ export function useMarket() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resolving, commitBankroll, pushTape]);
 
+  // ---- derived identity ----
+  // A linked wallet overrides the mock handle everywhere.
+  const displayHandle = wallet.address ? truncateAddress(wallet.address) : handle;
+
   // ---- actions ----
   const placeBet = useCallback(
     (side: Side, rawStake: number): boolean => {
@@ -402,24 +408,37 @@ export function useMarket() {
       setBets(nb);
       lsSet(LS.bets, { roundId: roundIdAt(Date.now()), bets: nb });
       pushTape(
-        `T+${String(el).padStart(2, "0")} ${handle ?? "YOU"} >> ${side} ${stake} CR`,
+        `T+${String(el).padStart(2, "0")} ${displayHandle ?? "YOU"} >> ${side} ${stake} CR`,
         "user"
       );
       return true;
     },
-    [handle, commitBankroll, pushTape]
+    [displayHandle, commitBankroll, pushTape]
   );
 
   const connect = useCallback(() => {
-    if (handle) return;
+    // Real wallet first. Mock handle only when no provider is injected.
+    if (wallet.available && !wallet.address) {
+      void wallet.connect().then((addr) => {
+        if (addr) pushTape(`WALLET LINKED :: ${truncateAddress(addr)}`);
+      });
+      return;
+    }
+    if (handle || wallet.address) return;
     const rng = mulberry32((Date.now() % 2147483647) >>> 0);
     const h = `${HANDLES[Math.floor(rng() * HANDLES.length)]}-${String(
       100 + Math.floor(rng() * 900)
     )}`;
     setHandle(h);
     lsSet(LS.handle, h);
-    pushTape(`HANDLE ASSIGNED :: ${h}`);
-  }, [handle, pushTape]);
+    pushTape(`HANDLE ASSIGNED :: ${h} // SPECTATOR MODE`);
+  }, [handle, wallet, pushTape]);
+
+  const disconnect = useCallback(() => {
+    if (!wallet.address) return;
+    void wallet.disconnect();
+    pushTape("WALLET UNLINKED // SPECTATOR MODE");
+  }, [wallet, pushTape]);
 
   const refill = useCallback(() => {
     if (bankrollRef.current >= 10) return;
@@ -453,7 +472,10 @@ export function useMarket() {
     record,
     streak,
     history,
-    handle,
+    handle: displayHandle,
+    walletAvailable: wallet.available,
+    walletConnected: wallet.address !== null,
+    walletConnecting: wallet.connecting,
     resolving,
     poolUp,
     poolDown,
@@ -461,6 +483,7 @@ export function useMarket() {
     userDown,
     placeBet,
     connect,
+    disconnect,
     refill,
   };
 }

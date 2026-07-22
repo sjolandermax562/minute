@@ -20,7 +20,10 @@ export default function MinuteApp() {
         tick={m.tick}
         dir={m.dir}
         handle={m.handle}
+        walletAvailable={m.walletAvailable}
+        walletConnected={m.walletConnected}
         onConnect={m.connect}
+        onDisconnect={m.disconnect}
       />
       <Board
         rid={m.rid}
