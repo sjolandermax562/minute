@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <pattern id="scan" width="8" height="6" patternUnits="userSpaceOnUse">
+      <rect width="8" height="1" y="0" fill="#EAEAEA" fill-opacity="0.045"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="900" fill="#0A0A0A"/>
+  <rect width="1600" height="900" fill="url(#scan)"/>
+  <!-- horizontal telemetry rules -->
+  <g stroke="#EAEAEA" stroke-opacity="0.12" stroke-width="1">
+    <line x1="0" y1="180" x2="1600" y2="180"/>
+    <line x1="0" y1="720" x2="1600" y2="720"/>
+  </g>
+  <g stroke="#EAEAEA" stroke-opacity="0.05" stroke-width="1">
+    <line x1="0" y1="270" x2="1600" y2="270"/>
+    <line x1="0" y1="360" x2="1600" y2="360"/>
+    <line x1="0" y1="540" x2="1600" y2="540"/>
+    <line x1="0" y1="630" x2="1600" y2="630"/>
+  </g>
+  <!-- red tick -->
+  <rect x="120" y="330" width="6" height="240" fill="#FF2A2A"/>
+  <!-- wordmark -->
+  <text x="170" y="520" font-family="'Arial Black','Archivo Black',sans-serif" font-size="220" letter-spacing="10" fill="#EAEAEA">MINUTE</text>
+  <!-- colon-60 motif -->
+  <text x="170" y="620" font-family="'Consolas','JetBrains Mono',monospace" font-size="44" letter-spacing="8" fill="#EAEAEA" fill-opacity="0.8">UP / DOWN <tspan fill="#FF2A2A">:</tspan> 60s <tspan fill="#FF2A2A">:</tspan> SOL/USD</text>
+  <!-- tagline -->
+  <text x="170" y="700" font-family="'Consolas','JetBrains Mono',monospace" font-size="30" letter-spacing="4" fill="#EAEAEA" fill-opacity="0.55">sixty seconds, one real price</text>
+  <!-- corner telemetry -->
+  <text x="1480" y="160" text-anchor="end" font-family="'Consolas',monospace" font-size="22" letter-spacing="3" fill="#EAEAEA" fill-opacity="0.4">PYTH ORACLE // T+00</text>
+  <text x="1480" y="760" text-anchor="end" font-family="'Consolas',monospace" font-size="22" letter-spacing="3" fill="#FF2A2A" fill-opacity="0.8">&#9608; LIVE</text>
+</svg>

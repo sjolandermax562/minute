@@ -5,6 +5,23 @@ export const metadata: Metadata = {
   title: "MINUTE // 60S SOL ORACLE MARKET",
   description:
     "Sixty-second up/down rounds on the real Pyth SOL/USD print. Fake credits, real oracle, verifiable timestamps.",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
+  openGraph: {
+    title: "MINUTE // 60S SOL ORACLE MARKET",
+    description:
+      "Sixty-second up/down rounds on the real Pyth SOL/USD print. Fake credits, real oracle, verifiable timestamps.",
+    images: [{ url: "/banner.png", width: 1600, height: 900 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MINUTE // 60S SOL ORACLE MARKET",
+    description:
+      "Sixty-second up/down rounds on the real Pyth SOL/USD print. Fake credits, real oracle, verifiable timestamps.",
+    images: ["/banner.png"],
+  },
 };
 
 export default function RootLayout({
