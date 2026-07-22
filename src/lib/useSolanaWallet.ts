@@ -21,6 +21,7 @@ export interface SolanaProvider {
 declare global {
   interface Window {
     solana?: SolanaProvider;
+    phantom?: { solana?: SolanaProvider };
     solflare?: SolanaProvider;
     backpack?: SolanaProvider;
   }
@@ -28,7 +29,7 @@ declare global {
 
 export function truncateAddress(base58: string): string {
   if (base58.length <= 9) return base58;
-  return `${base58.slice(0, 4)}…${base58.slice(-4)}`;
+  return `${base58.slice(0, 4)}...${base58.slice(-4)}`;
 }
 
 function detectProvider(): { provider: SolanaProvider; name: string } | null {
@@ -36,6 +37,7 @@ function detectProvider(): { provider: SolanaProvider; name: string } | null {
   const w = window;
   // Prefer Phantom when several wallets are injected.
   if (w.solana?.isPhantom) return { provider: w.solana, name: "PHANTOM" };
+  if (w.phantom?.solana) return { provider: w.phantom.solana, name: "PHANTOM" };
   if (w.solana) return { provider: w.solana, name: "SOLANA" };
   if (w.solflare) return { provider: w.solflare, name: "SOLFLARE" };
   if (w.backpack) return { provider: w.backpack, name: "BACKPACK" };
